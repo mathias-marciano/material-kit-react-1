@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
+import axios from 'axios';
 
 const Page = () => {
   const router = useRouter();
@@ -25,8 +26,8 @@ const Page = () => {
   const [method, setMethod] = useState('email');
   const formik = useFormik({
     initialValues: {
-      email: 'demo@devias.io',
-      password: 'Password123!',
+      email: '',
+      password: '',
       submit: null
     },
     validationSchema: Yup.object({
@@ -40,6 +41,7 @@ const Page = () => {
         .max(255)
         .required('Password is required')
     }),
+    /**
     onSubmit: async (values, helpers) => {
       try {
         await auth.signIn(values.email, values.password);
@@ -47,6 +49,28 @@ const Page = () => {
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
+        helpers.setSubmitting(false);
+      }
+    }
+    */
+    onSubmit: async (values, helpers) => {
+      try {
+        // Remplacez '/api/auth/login' par l'URL de votre API de connexion
+        const response = await axios.post('/api/auth/login', {
+          email: values.email,
+          password: values.password,
+        });
+    
+        console.log(response.data); // Affiche la réponse du serveur
+        // Ici, vous devez gérer la session de l'utilisateur (stocker le token, par exemple)
+        const user_resp = response.data.user;
+        auth.signIn(user_resp.id, user_resp.email, user_resp.name)
+        router.push('/'); // Redirige vers la page d'accueil après la connexion
+        console.log("Connecté !")
+      } catch (err) {
+        helpers.setStatus({ success: false });
+        // Vous pouvez personnaliser le message en fonction de la réponse de l'API
+        helpers.setErrors({ submit: (err.response && err.response.data.message) || 'Login failed' });
         helpers.setSubmitting(false);
       }
     }
@@ -71,7 +95,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Login | Devias Kit
+          Connexion | Elyas Conseil
         </title>
       </Head>
       <Box
@@ -97,13 +121,13 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-                Login
+                Connexion
               </Typography>
               <Typography
                 color="text.secondary"
                 variant="body2"
               >
-                Don&apos;t have an account?
+                Pas encore de compte ?
                 &nbsp;
                 <Link
                   component={NextLink}
@@ -111,7 +135,7 @@ const Page = () => {
                   underline="hover"
                   variant="subtitle2"
                 >
-                  Register
+                  Créer un compte
                 </Link>
               </Typography>
             </Stack>
@@ -121,12 +145,8 @@ const Page = () => {
               value={method}
             >
               <Tab
-                label="Email"
+                label="S'identifier par email"
                 value="email"
-              />
-              <Tab
-                label="Phone Number"
-                value="phoneNumber"
               />
             </Tabs>
             {method === 'email' && (
@@ -139,7 +159,7 @@ const Page = () => {
                     error={!!(formik.touched.email && formik.errors.email)}
                     fullWidth
                     helperText={formik.touched.email && formik.errors.email}
-                    label="Email Address"
+                    label="Email"
                     name="email"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
@@ -150,7 +170,7 @@ const Page = () => {
                     error={!!(formik.touched.password && formik.errors.password)}
                     fullWidth
                     helperText={formik.touched.password && formik.errors.password}
-                    label="Password"
+                    label="Mot de passe"
                     name="password"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
@@ -158,9 +178,6 @@ const Page = () => {
                     value={formik.values.password}
                   />
                 </Stack>
-                <FormHelperText sx={{ mt: 1 }}>
-                  Optionally you can skip.
-                </FormHelperText>
                 {formik.errors.submit && (
                   <Typography
                     color="error"
@@ -179,37 +196,7 @@ const Page = () => {
                 >
                   Continue
                 </Button>
-                <Button
-                  fullWidth
-                  size="large"
-                  sx={{ mt: 3 }}
-                  onClick={handleSkip}
-                >
-                  Skip authentication
-                </Button>
-                <Alert
-                  color="primary"
-                  severity="info"
-                  sx={{ mt: 3 }}
-                >
-                  <div>
-                    You can use <b>demo@devias.io</b> and password <b>Password123!</b>
-                  </div>
-                </Alert>
               </form>
-            )}
-            {method === 'phoneNumber' && (
-              <div>
-                <Typography
-                  sx={{ mb: 1 }}
-                  variant="h6"
-                >
-                  Not available in the demo
-                </Typography>
-                <Typography color="text.secondary">
-                  To prevent unnecessary costs we disabled this feature in the demo.
-                </Typography>
-              </div>
             )}
           </div>
         </Box>

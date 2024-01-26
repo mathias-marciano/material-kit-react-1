@@ -1,0 +1,36 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  name      String?
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  projets   Projets[]
+}
+
+model Projets {
+  id            Int      @id @default(autoincrement())
+  id_user       Int      
+  nomProjet     String
+  client        String
+  description   String
+  etatDeLArt    String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relation avec la table User
+  user          User     @relation(fields: [id_user], references: [id])
+
+  @@index([id_user])
+}

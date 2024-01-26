@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import { Box, Button, Link, Stack, TextField, Typography } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
+import axios from 'axios';
 
 const Page = () => {
   const router = useRouter();
@@ -34,11 +35,18 @@ const Page = () => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        await auth.signUp(values.email, values.name, values.password);
-        router.push('/');
+        // Remplacer '/api/auth/signup' par l'URL de votre API d'inscription
+        const response = await axios.post('/api/auth/signup', {
+          email: values.email,
+          name: values.name,
+          password: values.password,
+        });
+    
+        console.log(response.data); // Affiche la réponse du serveur
+        router.push('/auth/login'); // Redirige vers la page de connexion
       } catch (err) {
         helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: err.message });
+        helpers.setErrors({ submit: err.response.data.message });
         helpers.setSubmitting(false);
       }
     }
@@ -48,7 +56,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Register | Devias Kit
+          Inscription | Elyas Conseil
         </title>
       </Head>
       <Box
@@ -73,13 +81,13 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-                Register
+                Inscription
               </Typography>
               <Typography
                 color="text.secondary"
                 variant="body2"
               >
-                Already have an account?
+                Vous avez déjà un compte?
                 &nbsp;
                 <Link
                   component={NextLink}
@@ -100,7 +108,7 @@ const Page = () => {
                   error={!!(formik.touched.name && formik.errors.name)}
                   fullWidth
                   helperText={formik.touched.name && formik.errors.name}
-                  label="Name"
+                  label="Nom"
                   name="name"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
@@ -110,7 +118,7 @@ const Page = () => {
                   error={!!(formik.touched.email && formik.errors.email)}
                   fullWidth
                   helperText={formik.touched.email && formik.errors.email}
-                  label="Email Address"
+                  label="Email"
                   name="email"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
@@ -121,7 +129,7 @@ const Page = () => {
                   error={!!(formik.touched.password && formik.errors.password)}
                   fullWidth
                   helperText={formik.touched.password && formik.errors.password}
-                  label="Password"
+                  label="Mot de passe"
                   name="password"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
@@ -145,7 +153,7 @@ const Page = () => {
                 type="submit"
                 variant="contained"
               >
-                Continue
+                Créer un compte
               </Button>
             </form>
           </div>

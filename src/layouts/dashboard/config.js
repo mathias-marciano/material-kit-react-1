@@ -1,6 +1,8 @@
 import ChartBarIcon from '@heroicons/react/24/solid/ChartBarIcon';
 import CogIcon from '@heroicons/react/24/solid/CogIcon';
+import FolderIcon from '@heroicons/react/24/solid/FolderIcon';
 import LockClosedIcon from '@heroicons/react/24/solid/LockClosedIcon';
+import PlusCircleIcon from '@heroicons/react/24/solid/PlusCircleIcon';
 import ShoppingBagIcon from '@heroicons/react/24/solid/ShoppingBagIcon';
 import UserIcon from '@heroicons/react/24/solid/UserIcon';
 import UserPlusIcon from '@heroicons/react/24/solid/UserPlusIcon';
@@ -10,34 +12,25 @@ import { SvgIcon } from '@mui/material';
 
 export const items = [
   {
-    title: 'Overview',
-    path: '/',
+    title: 'Nouveau projet',
+    path: '/new_project',
     icon: (
       <SvgIcon fontSize="small">
-        <ChartBarIcon />
+        <PlusCircleIcon />
       </SvgIcon>
     )
   },
   {
-    title: 'Customers',
-    path: '/customers',
+    title: 'Mes projets',
+    path: '/my_projects',
     icon: (
       <SvgIcon fontSize="small">
-        <UsersIcon />
+        <FolderIcon />
       </SvgIcon>
     )
   },
   {
-    title: 'Companies',
-    path: '/companies',
-    icon: (
-      <SvgIcon fontSize="small">
-        <ShoppingBagIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Account',
+    title: 'Mon profil',
     path: '/account',
     icon: (
       <SvgIcon fontSize="small">
@@ -51,33 +44,6 @@ export const items = [
     icon: (
       <SvgIcon fontSize="small">
         <CogIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Login',
-    path: '/auth/login',
-    icon: (
-      <SvgIcon fontSize="small">
-        <LockClosedIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Register',
-    path: '/auth/register',
-    icon: (
-      <SvgIcon fontSize="small">
-        <UserPlusIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Error',
-    path: '/404',
-    icon: (
-      <SvgIcon fontSize="small">
-        <XCircleIcon />
       </SvgIcon>
     )
   }

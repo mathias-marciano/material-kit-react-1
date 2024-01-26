@@ -8,7 +8,6 @@ export const AccountPopover = (props) => {
   const { anchorEl, onClose, open } = props;
   const router = useRouter();
   const auth = useAuth();
-
   const handleSignOut = useCallback(
     () => {
       onClose?.();
@@ -17,7 +16,7 @@ export const AccountPopover = (props) => {
     },
     [onClose, auth, router]
   );
-
+  const isAuthenticated = window.sessionStorage.getItem('authenticated') === 'true';
   return (
     <Popover
       anchorEl={anchorEl}
@@ -36,13 +35,13 @@ export const AccountPopover = (props) => {
         }}
       >
         <Typography variant="overline">
-          Account
+          Compte
         </Typography>
         <Typography
           color="text.secondary"
           variant="body2"
         >
-          Anika Visser
+          {isAuthenticated && auth.user.name}
         </Typography>
       </Box>
       <Divider />

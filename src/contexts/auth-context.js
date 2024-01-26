@@ -65,39 +65,30 @@ export const AuthProvider = (props) => {
   const initialized = useRef(false);
 
   const initialize = async () => {
-    // Prevent from calling twice in development mode with React.StrictMode enabled
     if (initialized.current) {
       return;
     }
-
+  
     initialized.current = true;
-
-    let isAuthenticated = false;
-
-    try {
-      isAuthenticated = window.sessionStorage.getItem('authenticated') === 'true';
-    } catch (err) {
-      console.error(err);
-    }
-
-    if (isAuthenticated) {
-      const user = {
-        id: '5e86809283e28b96d2d38537',
-        avatar: '/assets/avatars/avatar-anika-visser.png',
-        name: 'Anika Visser',
-        email: 'anika.visser@devias.io'
-      };
-
+  
+    const isAuthenticated = window.sessionStorage.getItem('authenticated') === 'true';
+    const storedUser = window.sessionStorage.getItem('user');
+  
+    if (isAuthenticated && storedUser) {
+      const user = JSON.parse(storedUser); // Récupérer les informations de l'utilisateur
+  
       dispatch({
         type: HANDLERS.INITIALIZE,
         payload: user
       });
     } else {
+      // Gérer l'état non authentifié
       dispatch({
         type: HANDLERS.INITIALIZE
       });
     }
   };
+  
 
   useEffect(
     () => {
@@ -127,39 +118,35 @@ export const AuthProvider = (props) => {
     });
   };
 
-  const signIn = async (email, password) => {
-    if (email !== 'demo@devias.io' || password !== 'Password123!') {
-      throw new Error('Please check your email and password');
-    }
-
+  const signIn = async (id, email, name) => {
     try {
+      const user = { id, name, email };
       window.sessionStorage.setItem('authenticated', 'true');
+      window.sessionStorage.setItem('user', JSON.stringify(user)); // Stocker les informations de l'utilisateur
+  
+      dispatch({
+        type: HANDLERS.SIGN_IN,
+        payload: user
+      });
     } catch (err) {
       console.error(err);
     }
-
-    const user = {
-      id: '5e86809283e28b96d2d38537',
-      avatar: '/assets/avatars/avatar-anika-visser.png',
-      name: 'Anika Visser',
-      email: 'anika.visser@devias.io'
-    };
-
-    dispatch({
-      type: HANDLERS.SIGN_IN,
-      payload: user
-    });
   };
+  
 
   const signUp = async (email, name, password) => {
     throw new Error('Sign up is not implemented');
   };
 
   const signOut = () => {
+    window.sessionStorage.removeItem('authenticated');
+    window.sessionStorage.removeItem('user'); // Supprimer les informations de l'utilisateur
+  
     dispatch({
       type: HANDLERS.SIGN_OUT
     });
   };
+  
 
   return (
     <AuthContext.Provider

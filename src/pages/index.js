@@ -17,7 +17,7 @@ const Page = () => (
   <>
     <Head>
       <title>
-        Overview | Devias Kit
+        Index | Elyas Conseil
       </title>
     </Head>
     <Box

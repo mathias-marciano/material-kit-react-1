@@ -8,17 +8,20 @@ import {
   Divider,
   Typography
 } from '@mui/material';
+import { useAuth } from 'src/hooks/use-auth';
 
-const user = {
-  avatar: '/assets/avatars/avatar-anika-visser.png',
-  city: 'Los Angeles',
-  country: 'USA',
-  jobTitle: 'Senior Developer',
-  name: 'Anika Visser',
-  timezone: 'GTM-7'
-};
+export const AccountProfile = () => {
+  const auth = useAuth();
 
-export const AccountProfile = () => (
+  const user = {
+    avatar: 'assets/1631376294224.jpg',
+    city: 'Paris',
+    country: 'FRA',
+    jobTitle: 'Consultant',
+    name: auth.user.name,
+    timezone: 'GTM+1'
+  };
+  return (
   <Card>
     <CardContent>
       <Box
@@ -62,8 +65,9 @@ export const AccountProfile = () => (
         fullWidth
         variant="text"
       >
-        Upload picture
+        Changer photo de profil
       </Button>
     </CardActions>
   </Card>
-);
+  );
+};

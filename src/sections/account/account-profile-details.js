@@ -10,6 +10,7 @@ import {
   TextField,
   Unstable_Grid2 as Grid
 } from '@mui/material';
+import { useAuth } from 'src/hooks/use-auth';
 
 const states = [
   {
@@ -31,13 +32,15 @@ const states = [
 ];
 
 export const AccountProfileDetails = () => {
+  const auth = useAuth();
+
   const [values, setValues] = useState({
-    firstName: 'Anika',
-    lastName: 'Visser',
-    email: 'demo@devias.io',
+    firstName: auth.user.name,
+    lastName: '',
+    email: auth.user.email,
     phone: '',
-    state: 'los-angeles',
-    country: 'USA'
+    state: 'Paris',
+    country: 'FRA'
   });
 
   const handleChange = useCallback(
@@ -65,8 +68,8 @@ export const AccountProfileDetails = () => {
     >
       <Card>
         <CardHeader
-          subheader="The information can be edited"
-          title="Profile"
+          subheader="Ces informations peuvent être modifiées"
+          title="Profil"
         />
         <CardContent sx={{ pt: 0 }}>
           <Box sx={{ m: -1.5 }}>
@@ -80,8 +83,8 @@ export const AccountProfileDetails = () => {
               >
                 <TextField
                   fullWidth
-                  helperText="Please specify the first name"
-                  label="First name"
+                  helperText="Spécifier le prénom"
+                  label="Prénom"
                   name="firstName"
                   onChange={handleChange}
                   required
@@ -94,7 +97,7 @@ export const AccountProfileDetails = () => {
               >
                 <TextField
                   fullWidth
-                  label="Last name"
+                  label="Nom"
                   name="lastName"
                   onChange={handleChange}
                   required
@@ -107,7 +110,7 @@ export const AccountProfileDetails = () => {
               >
                 <TextField
                   fullWidth
-                  label="Email Address"
+                  label="Email"
                   name="email"
                   onChange={handleChange}
                   required
@@ -120,7 +123,7 @@ export const AccountProfileDetails = () => {
               >
                 <TextField
                   fullWidth
-                  label="Phone Number"
+                  label="Numéro de téléphone"
                   name="phone"
                   onChange={handleChange}
                   type="number"
@@ -146,7 +149,7 @@ export const AccountProfileDetails = () => {
               >
                 <TextField
                   fullWidth
-                  label="Select State"
+                  label="Selectionner une ville"
                   name="state"
                   onChange={handleChange}
                   required
@@ -170,7 +173,7 @@ export const AccountProfileDetails = () => {
         <Divider />
         <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button variant="contained">
-            Save details
+            Enregistrer
           </Button>
         </CardActions>
       </Card>
